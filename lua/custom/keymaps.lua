@@ -15,3 +15,8 @@ map('n', '<leader>sd', ':Telescope diagnostics<CR>', { desc = '[S]earch [D]iagno
 map('n', '<leader>sc', ':Telescope commands<CR>', { desc = '[S]earch [C]ommands' })
 map('n', '<leader>sk', ':Telescope keymaps<CR>', { desc = '[S]earch [K]eymaps' })
 map('n', '<leader>sf', ':Telescope find_files<CR>', { desc = '[S]earch [F]iles' })
+
+map('t', '<C-h>', '<C-\\><C-n><C-w>h', { desc = 'Move to left window' })
+map('t', '<C-j>', '<C-\\><C-n><C-w>j', { desc = 'Move to window below' })
+map('t', '<C-k>', '<C-\\><C-n><C-w>k', { desc = 'Move to window above' })
+map('t', '<C-l>', '<C-\\><C-n><C-w>l', { desc = 'Move to right window' })
