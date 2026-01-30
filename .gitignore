@@ -1,12 +1,54 @@
-tags
-test.sh
-.luarc.json
-nvim
-
-spell/
-
-# You can uncomment this yourself if you want to lock the lazy-lock.json,
-# but for kickstart, it makes sense to leave it ignored.
+# Lazy plugin manager
 lazy-lock.json
 
+# Local/private config (API keys, personal settings)
+lua/custom/local.lua
+lua/local.lua
+.env
+*.local.lua
+
+# Copilot/AI tokens
+copilot/
+github-copilot/
+
+# Spell files
+spell/
+
+# Session files
+Session.vim
+*.session
+
+# Undo/backup/swap
+undo/
+backup/
+*.swp
+*.swo
+*~
+
+# Tags
+tags
+tags.*
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Lua language server
+.luarc.json
+.luarc.jsonc
+
+# Testing
+test.sh
+nvim
+
+# Log files
+*.log
+debug.log
+
+# Credentials (never commit these!)
+*.pem
+*.key
+*secret*
+*credential*
+*token*

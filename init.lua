@@ -374,7 +374,6 @@ require('lazy').setup({
             },
             workspace = {
               checkThirdParty = false,
-              library = vim.api.nvim_get_runtime_file('', true),
             },
           })
         end,
@@ -482,7 +481,14 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        providers = {
+          lazydev = {
+            name = 'lazydev',
+            module = 'lazydev.integration.blink',
+            score_offset = 100,
+          },
+        },
       },
 
       snippets = { preset = 'luasnip' },
