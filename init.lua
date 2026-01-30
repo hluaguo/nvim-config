@@ -5,14 +5,10 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 require 'custom.keymaps'
-
--- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.relativenumber = true
--- enable mouse mode
 vim.o.mouse = 'a'
--- we show mode on status line
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
@@ -22,6 +18,10 @@ vim.o.showmode = false
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 vim.o.breakindent = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.expandtab = true
 
 -- Save undo history
 vim.o.undofile = true
@@ -83,32 +83,6 @@ vim.diagnostic.config {
   jump = { float = true },
 }
 
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
-
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.hl.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
@@ -129,8 +103,6 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
-  { 'NMAC427/guess-indent.nvim', opts = {} },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -359,24 +331,17 @@ require('lazy').setup({
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
         lua_ls = {},
+        pyright = {},
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
         -- rust_analyzer = {},
         -- ts_ls = {},
       }
 
-      -- Ensure the servers and tools above are installed
-      --
-      -- To check the current status of installed tools and/or manually install
-      -- other tools, you can run
-      --    :Mason
-      --
-      -- You can press `g?` for help in this menu.
-
       require('mason-lspconfig').setup {
         ensure_installed = {
           'lua_ls',
+          'pyright',
           -- Add other LSPs here: 'ts_ls', 'pyright', etc
         },
         automatic_installation = true,
@@ -405,7 +370,7 @@ require('lazy').setup({
               path = { 'lua/?.lua', 'lua/?/init.lua' },
             },
             diagnostics = {
-              globals = { 'vim' },
+              globals = { 'vim', 'Snacks' },
             },
             workspace = {
               checkThirdParty = false,
@@ -494,20 +459,18 @@ require('lazy').setup({
     --- @type blink.cmp.Config
     opts = {
       keymap = {
-        keymap = {
-          preset = 'none',
-          ['<C-space>'] = { 'show_documentation', 'hide_documentation' },
-          ['<C-e>'] = { 'hide' },
-          ['<Tab>'] = { 'select_next', 'fallback' },
-          ['<S-Tab>'] = { 'select_prev', 'fallback' },
-          ['<CR>'] = { 'select_and_accept', 'fallback' },
+        preset = 'none',
+        ['<C-space>'] = { 'show_documentation', 'hide_documentation' },
+        ['<C-e>'] = { 'hide' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+        ['<CR>'] = { 'select_and_accept', 'fallback' },
 
-          ['<C-p>'] = { 'select_prev', 'fallback' },
-          ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
 
-          ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
-          ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
-        },
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
       },
 
       appearance = {
@@ -584,15 +547,15 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
+      -- local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
+
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function() return '%2l:%-2v' end
+      -- statusline.section_location = function() return '%2l:%-2v' end
 
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
