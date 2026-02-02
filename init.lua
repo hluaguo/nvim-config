@@ -133,28 +133,6 @@ require('lazy').setup({
     },
   },
 
-  -- LSP keymaps using Snacks picker (replaces Telescope)
-  {
-    'folke/snacks.nvim',
-    event = 'LspAttach',
-    config = function()
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('snacks-lsp-attach', { clear = true }),
-        callback = function(event)
-          local buf = event.buf
-          local map = function(keys, func, desc) vim.keymap.set('n', keys, func, { buffer = buf, desc = 'LSP: ' .. desc }) end
-
-          map('grr', function() Snacks.picker.lsp_references() end, 'References')
-          map('gri', function() Snacks.picker.lsp_implementations() end, 'Implementation')
-          map('grd', function() Snacks.picker.lsp_definitions() end, 'Definition')
-          map('gO', function() Snacks.picker.lsp_symbols() end, 'Document Symbols')
-          map('gW', function() Snacks.picker.lsp_workspace_symbols() end, 'Workspace Symbols')
-          map('grt', function() Snacks.picker.lsp_type_definitions() end, 'Type Definition')
-        end,
-      })
-    end,
-  },
-
   -- LSP Plugins
   {
     -- Main LSP Configuration
